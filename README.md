@@ -1,6 +1,6 @@
 # 👁️ Sentry Node
 
-<img src="./public/logo.png" alt="Sentry Node Logo" width="200" />
+<img src="./public/banner.png" alt="Sentry Node Banner" width="100%" />
 
 **Sentry Node** is a React-based "Physical Oracle" and surveillance dashboard. Designed with a dense, military-grade ops center UI, it combines real-time webcam human detection via TensorFlow, simulated automated Solana security slashing, and live cross-chain vault funding via LI.FI.
 
