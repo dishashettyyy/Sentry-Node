@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import { ShieldAlert, ShieldCheck } from 'lucide-react';
 
 export default function SentryCamera({ onThreatDetected }) {
   const videoRef = useRef(null);
@@ -72,30 +71,30 @@ export default function SentryCamera({ onThreatDetected }) {
   }, [model, isGuarding, lastThreatTime, onThreatDetected]);
 
   return (
-    <div className="relative border-2 border-[var(--color-sentry-accent)] rounded-xl overflow-hidden bg-black p-4 flex flex-col gap-4 shadow-[0_0_15px_rgba(20,241,149,0.2)]">
+    <div className="panel-container flex flex-col h-full bg-[#030303] relative">
       {isFlashing && (
-        <div className="fixed inset-0 bg-[#FF003C]/80 z-50 pointer-events-none transition-opacity duration-100 mix-blend-screen" />
+        <div className="absolute inset-0 bg-[#FF003C]/40 z-50 pointer-events-none mix-blend-color-dodge" />
       )}
       
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[var(--color-sentry-accent)] flex items-center gap-2 tracking-wider">
-          {isGuarding ? <ShieldAlert className="animate-pulse" /> : <ShieldCheck />}
-          PERCEPTION LAYER
-        </h2>
-        <div className="flex items-center gap-4">
-           <span className={`text-sm font-bold tracking-widest ${isGuarding ? 'text-[var(--color-sentry-alert)] animate-pulse' : 'text-gray-500'}`}>
-             {isGuarding ? 'STATUS: GUARDING' : 'STATUS: STANDBY'}
+      {/* Top Bar */}
+      <div className="flex items-center justify-between border-b border-[var(--color-sentry-accent)]/20 p-2 bg-[#050505]">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-white tracking-widest">[CH-1] OPTICAL SENSOR</span>
+        </div>
+        <div className="flex items-center gap-3">
+           <span className={`text-[10px] font-bold tracking-widest ${isGuarding ? 'text-[var(--color-sentry-alert)] animate-pulse' : 'text-gray-600'}`}>
+             {isGuarding ? '● REC' : '○ STDBY'}
            </span>
            <button 
              onClick={() => setIsGuarding(!isGuarding)}
-             className={`px-6 py-2 rounded font-bold text-black transition-all hover:scale-105 active:scale-95 ${isGuarding ? 'bg-[var(--color-sentry-alert)] shadow-[0_0_10px_#FF003C]' : 'bg-[var(--color-sentry-accent)] shadow-[0_0_10px_#14F195]'}`}
+             className={`px-3 py-1 text-[10px] border font-bold text-white transition-all ${isGuarding ? 'border-[var(--color-sentry-alert)] bg-[var(--color-sentry-alert)]/20 hover:bg-[var(--color-sentry-alert)]/40' : 'border-[var(--color-sentry-accent)] bg-[var(--color-sentry-accent)]/10 hover:bg-[var(--color-sentry-accent)]/30'}`}
            >
-             {isGuarding ? 'DISARM' : 'ARM SENTRY'}
+             {isGuarding ? '■ DISARM' : '▶ ARM'}
            </button>
         </div>
       </div>
 
-      <div className="relative aspect-video bg-gray-950 rounded-lg overflow-hidden flex items-center justify-center border border-[var(--color-sentry-accent)]/30">
+      <div className="flex-1 relative bg-black overflow-hidden scanline flex items-center justify-center p-2">
         <video 
           ref={videoRef} 
           autoPlay 
@@ -103,31 +102,37 @@ export default function SentryCamera({ onThreatDetected }) {
           muted 
           width="320" 
           height="240" 
-          className="w-full h-full object-cover opacity-70 grayscale contrast-125"
+          className="w-full h-full object-cover opacity-80 grayscale contrast-125 sepia-[.2]"
         />
-        {/* Cyberpunk grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(20,241,149,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(20,241,149,0.1)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
         
-        {/* Cyberpunk HUD overlay elements */}
-        <div className="absolute top-4 left-4 text-xs text-[var(--color-sentry-accent)]/70 font-mono tracking-widest flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          REC_FEED
+        {/* Military HUD Overlays */}
+        <div className="absolute top-4 left-4 text-[10px] text-[var(--color-sentry-accent)]/70 font-mono tracking-widest">
+          AZIMUTH: 184.2<br/>FOV: 90.0
         </div>
-        <div className="absolute bottom-4 right-4 text-xs text-[var(--color-sentry-accent)]/70 font-mono tracking-widest">
-          SYS_RES: 320x240 @ 1.33Hz
+        <div className="absolute bottom-4 left-4 text-[10px] text-[var(--color-sentry-accent)]/70 font-mono tracking-widest">
+          LAT/LONG: [REDACTED]<br/>ALT: 14M ASL
+        </div>
+        <div className="absolute top-4 right-4 text-[10px] text-[var(--color-sentry-accent)]/70 font-mono tracking-widest text-right">
+          CLASSIFIER: COCO-SSD<br/>CONFIDENCE: 0.8+
         </div>
         
-        {/* Corner brackets */}
-        <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-[var(--color-sentry-accent)]/50 pointer-events-none" />
-        <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-[var(--color-sentry-accent)]/50 pointer-events-none" />
-        <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[var(--color-sentry-accent)]/50 pointer-events-none" />
-        <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[var(--color-sentry-accent)]/50 pointer-events-none" />
+        {/* Reticle / Targeting box */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-[var(--color-sentry-accent)]/20 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-[var(--color-sentry-accent)]/50 rounded-full" />
+          {/* Corner brackets for reticle */}
+          <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[var(--color-sentry-accent)]" />
+          <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[var(--color-sentry-accent)]" />
+          <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[var(--color-sentry-accent)]" />
+          <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[var(--color-sentry-accent)]" />
+        </div>
         
         {!model && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-10">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-4 border-[var(--color-sentry-accent)] border-t-transparent rounded-full animate-spin" />
-              <span className="text-[var(--color-sentry-accent)] animate-pulse tracking-widest font-mono text-sm">LOADING NEURAL WEIGHTS...</span>
+          <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-10">
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[var(--color-sentry-accent)] animate-pulse tracking-widest font-mono text-[10px]">INITIATING NEURAL WEIGHTS...</span>
+              <div className="w-32 h-[1px] bg-[var(--color-sentry-accent)]/30 relative overflow-hidden">
+                <div className="absolute top-0 bottom-0 left-0 w-1/3 bg-[var(--color-sentry-accent)] animate-[bounce_1s_infinite_linear]" />
+              </div>
             </div>
           </div>
         )}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, Component } from 'react';
 import { LiFiWidget } from '@lifi/widget';
-import { Activity } from 'lucide-react';
 
 class WidgetErrorBoundary extends Component {
   constructor(props) {
@@ -19,9 +18,8 @@ class WidgetErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center h-full w-full bg-[#FF003C]/10 text-[#FF003C] font-mono text-sm border border-[#FF003C]/30 rounded-lg p-4 text-center">
-          <Activity className="w-8 h-8 mb-2 opacity-50" />
-          <span>WIDGET UNAVAILABLE</span>
+        <div className="flex flex-col items-center justify-center h-full w-full bg-[#FF003C]/10 text-[#FF003C] font-mono text-[10px] p-4 text-center">
+          <span>[ERR] WIDGET UNAVAILABLE</span>
         </div>
       );
     }
@@ -42,8 +40,7 @@ export default function SecurityDashboard({ latestThreat }) {
       const timeStr = new Date().toLocaleTimeString();
       setTxLog(prev => [`[${timeStr}] INITIATING 0.001 SOL SLASH PENALTY...`, ...prev]);
       
-      // In a real app we would use window.solana or wallet adapter to sign this.
-      // We will mock the delay for visual effect.
+      // Mock delay
       setTimeout(() => {
         setTxLog(prev => [`[${new Date().toLocaleTimeString()}] TX CONFIRMED: Penalty Enforced.`, ...prev]);
       }, 2000);
@@ -57,36 +54,34 @@ export default function SecurityDashboard({ latestThreat }) {
   const lifiConfig = {
     integrator: 'sentry-node',
     toChain: 115111108, // Solana
-    toToken: '0000000000000000000000000000000000000000', // Typically 0x0... or native identifier for LIFI
+    toToken: '0000000000000000000000000000000000000000',
     variant: 'compact',
     appearance: 'dark',
     theme: {
       palette: {
         primary: { main: '#14F195' },
-        background: { paper: '#0A0A0A', default: '#000000' }
+        background: { paper: '#050505', default: '#000000' }
       },
       typography: {
         fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
       },
       shape: {
-        borderRadius: 8,
-        borderRadiusSecondary: 8
+        borderRadius: 2,
+        borderRadiusSecondary: 2
       }
     }
   };
 
   return (
-    <div className="flex flex-col gap-6 h-full">
+    <div className="flex flex-col gap-2 h-full">
       {/* Transaction Log */}
-      <div className="border border-[var(--color-sentry-alert)]/40 rounded-xl bg-black p-4 min-h-[200px] flex flex-col shadow-[0_0_15px_rgba(255,0,60,0.15)] relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--color-sentry-alert)] to-transparent opacity-50" />
+      <div className="panel-container flex flex-col min-h-[250px] shadow-[0_0_15px_rgba(255,0,60,0.05)]">
+        <div className="flex items-center justify-between border-b border-[var(--color-sentry-accent)]/20 p-2 bg-[#050505]">
+          <span className="text-[10px] font-bold text-white tracking-widest">[SYS] ENFORCEMENT LOG</span>
+          <span className="text-[10px] text-[var(--color-sentry-alert)] animate-pulse">● ACTIVE</span>
+        </div>
         
-        <h3 className="text-[var(--color-sentry-alert)] mb-3 font-bold tracking-widest flex items-center gap-2 border-b border-[var(--color-sentry-alert)]/20 pb-2">
-          <Activity className="animate-pulse" />
-          ON-CHAIN ENFORCEMENT LOG
-        </h3>
-        
-        <div className="flex-1 overflow-y-auto flex flex-col gap-2 text-sm font-mono scrollbar-thin">
+        <div className="flex-1 overflow-y-auto flex flex-col text-[10px] font-mono scrollbar-thin p-2 bg-black">
           {txLog.length === 0 && (
             <div className="h-full flex items-center justify-center text-gray-600 animate-pulse">
               AWAITING PROTOCOL VIOLATIONS...
@@ -95,7 +90,7 @@ export default function SecurityDashboard({ latestThreat }) {
           {txLog.map((log, i) => (
             <div 
               key={i} 
-              className={`p-2 border-l-2 ${log.includes('CONFIRMED') ? 'border-[var(--color-sentry-accent)] text-[var(--color-sentry-accent)] bg-[var(--color-sentry-accent)]/10' : 'border-[var(--color-sentry-alert)] text-gray-300 bg-black'}`}
+              className={`py-1 border-b border-gray-900 ${log.includes('CONFIRMED') ? 'text-[var(--color-sentry-accent)]' : 'text-gray-400'}`}
             >
               {log}
             </div>
@@ -104,16 +99,16 @@ export default function SecurityDashboard({ latestThreat }) {
       </div>
       
       {/* Vault Funding */}
-      <div className="border border-[var(--color-sentry-accent)]/30 rounded-xl bg-[#050505] p-4 flex-1 flex flex-col relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--color-sentry-accent)]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#4F46E5]/10 rounded-full blur-3xl" />
-        
-        <h3 className="text-[var(--color-sentry-accent)] mb-4 font-bold tracking-widest text-center border-b border-[var(--color-sentry-accent)]/20 pb-3 relative z-10">
-          VAULT FUNDING (CROSS-CHAIN)
-        </h3>
-        <div className="flex-1 relative z-10 overflow-hidden flex items-center justify-center min-h-[300px]">
+      <div className="panel-container flex-1 flex flex-col">
+        <div className="flex items-center justify-between border-b border-[var(--color-sentry-accent)]/20 p-2 bg-[#050505]">
+          <span className="text-[10px] font-bold text-white tracking-widest">[EXT] VAULT FUNDING</span>
+          <span className="text-[10px] text-[var(--color-sentry-accent)] animate-pulse">● SECURE</span>
+        </div>
+        <div className="flex-1 overflow-hidden flex flex-col items-center justify-center p-2 bg-black">
           <WidgetErrorBoundary>
-            <LiFiWidget config={lifiConfig} />
+            <div className="w-full h-full max-h-full overflow-y-auto scrollbar-thin [&_.MuiPaper-root]:!shadow-none [&_.MuiPaper-root]:!bg-transparent">
+               <LiFiWidget config={lifiConfig} />
+            </div>
           </WidgetErrorBoundary>
         </div>
       </div>

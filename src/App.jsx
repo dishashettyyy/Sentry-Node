@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SentryCamera from './components/SentryCamera';
 import SecurityDashboard from './components/SecurityDashboard';
-import { Network } from 'lucide-react';
 
 function App() {
   const [latestThreat, setLatestThreat] = useState(null);
@@ -11,56 +10,56 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white p-6 font-mono flex flex-col h-screen overflow-hidden selection:bg-[var(--color-sentry-accent)] selection:text-black">
-      <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(20,241,149,0.03)_0%,transparent_100%)] pointer-events-none" />
-      
-      <header className="mb-6 flex items-center justify-between border-b border-[var(--color-sentry-accent)]/30 pb-4 relative z-10">
-        <h1 className="text-3xl font-black text-[var(--color-sentry-accent)] tracking-widest flex items-center gap-3 drop-shadow-[0_0_8px_rgba(20,241,149,0.5)]">
-          <Network className="w-8 h-8" />
-          SENTRY NODE
-        </h1>
-        <div className="text-sm font-bold text-gray-500 tracking-widest flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[var(--color-sentry-accent)] animate-ping" />
-          PHYSICAL SECURITY AGENT V1.0.0
+    <div className="min-h-screen bg-[var(--color-sentry-bg)] text-[var(--color-sentry-accent)] p-2 font-mono flex flex-col h-screen overflow-hidden selection:bg-[var(--color-sentry-accent)] selection:text-black">
+      {/* Terminal Title Bar */}
+      <header className="mb-2 flex items-center justify-between border-b border-[var(--color-sentry-accent)]/50 pb-1 px-2 text-[10px] md:text-xs">
+        <div className="flex gap-4">
+          <span className="font-bold text-white">NODE ID: SENTRY-X9</span>
+          <span className="text-[var(--color-sentry-accent)]/30">|</span>
+          <span>STATUS: <span className="text-[var(--color-sentry-accent)] font-bold">ONLINE</span></span>
+          <span className="text-[var(--color-sentry-accent)]/30">|</span>
+          <span className="text-gray-400">UPTIME: 99.99%</span>
+        </div>
+        <div className="flex gap-4">
+          <span>THREAT LEVEL: <span className="text-[var(--color-sentry-alert)] font-bold">ELEVATED</span></span>
+          <span className="text-[var(--color-sentry-accent)]/30">|</span>
+          <span>NET: <span className="text-[var(--color-sentry-network)] font-bold">SOL-DEV</span></span>
         </div>
       </header>
 
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-0 relative z-10">
-        {/* Left Pane */}
-        <div className="flex flex-col gap-6 overflow-hidden">
-          <SentryCamera onThreatDetected={handleThreatDetected} />
-          
-          <div className="border border-[var(--color-sentry-accent)]/30 rounded-xl p-4 bg-black flex-1 relative overflow-hidden shadow-[inset_0_0_20px_rgba(20,241,149,0.05)]">
-             <div className="absolute top-0 right-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[var(--color-sentry-accent)] to-transparent opacity-30" />
-             <h3 className="text-[var(--color-sentry-accent)] font-bold tracking-widest mb-4 border-b border-[var(--color-sentry-accent)]/20 pb-2 flex justify-between items-end">
-               <span>SYSTEM DIAGNOSTICS</span>
-               <span className="text-[10px] text-gray-500">LIVE</span>
-             </h3>
-             <ul className="text-sm text-gray-400 flex flex-col gap-3 font-mono">
-               <li className="flex justify-between items-center bg-gray-900/50 p-2 rounded">
-                 <span>NEURAL LINK</span>
-                 <span className="text-[var(--color-sentry-accent)]">CONNECTED</span>
-               </li>
-               <li className="flex justify-between items-center bg-gray-900/50 p-2 rounded">
-                 <span>UPTIME</span>
-                 <span className="text-[var(--color-sentry-accent)]">99.99%</span>
-               </li>
-               <li className="flex justify-between items-center bg-gray-900/50 p-2 rounded">
-                 <span>LAST SYNC</span>
-                 <span className="text-[var(--color-sentry-accent)]">{new Date().toLocaleTimeString()}</span>
-               </li>
-               <li className="flex justify-between items-center bg-gray-900/50 p-2 rounded">
-                 <span>NETWORK</span>
-                 <span className="text-[#9945FF]">SOLANA DEVNET</span>
-               </li>
-             </ul>
+      {/* 3-Column Grid */}
+      <main className="flex-1 grid grid-cols-1 md:grid-cols-[220px_1fr_320px] gap-2 min-h-0">
+        
+        {/* Left Column: Diagnostics */}
+        <div className="panel-container flex flex-col p-2">
+          <div className="flex justify-between items-center border-b border-[var(--color-sentry-accent)]/20 pb-1 mb-2">
+            <span className="text-[10px] font-bold text-white tracking-widest">[SYS] DIAGNOSTICS</span>
+            <span className="text-[10px] text-[var(--color-sentry-accent)] animate-pulse">● LIVE</span>
+          </div>
+          <div className="flex flex-col gap-1 text-[10px] text-gray-400">
+            <div className="flex justify-between"><span>LINK STATE:</span><span className="text-[var(--color-sentry-accent)]">SECURE</span></div>
+            <div className="flex justify-between"><span>LATENCY:</span><span>14ms</span></div>
+            <div className="flex justify-between"><span>LAST SYNC:</span><span>{new Date().toLocaleTimeString()}</span></div>
+            <div className="h-[1px] bg-[var(--color-sentry-accent)]/20 my-2" />
+            <div className="flex justify-between"><span>CPU LOAD:</span><span>24%</span></div>
+            <div className="flex justify-between"><span>MEM USAGE:</span><span>1.2GB</span></div>
+            <div className="flex justify-between"><span>TEMP:</span><span>42°C</span></div>
+            <div className="h-[1px] bg-[var(--color-sentry-accent)]/20 my-2" />
+            <div className="flex justify-between"><span>CHAIN:</span><span className="text-[var(--color-sentry-network)]">SOLANA</span></div>
+            <div className="flex justify-between"><span>RPC:</span><span className="text-[var(--color-sentry-accent)]">CONNECTED</span></div>
           </div>
         </div>
         
-        {/* Right Pane */}
+        {/* Center Column: Camera */}
+        <div className="flex flex-col min-h-0">
+          <SentryCamera onThreatDetected={handleThreatDetected} />
+        </div>
+
+        {/* Right Column: Dashboard */}
         <div className="flex flex-col min-h-0">
           <SecurityDashboard latestThreat={latestThreat} />
         </div>
+        
       </main>
     </div>
   );
