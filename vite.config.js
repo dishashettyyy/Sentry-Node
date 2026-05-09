@@ -18,8 +18,8 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['buffer', 'process', 'eventemitter3', 'bech32', 'react-is'],
-    esbuildOptions: {
-      define: { global: 'globalThis' },
-    },
+  },
+  build: {
+    chunkSizeWarningLimit: 4000,
   },
 })
