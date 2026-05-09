@@ -1,10 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { Connection, PublicKey, Transaction, SystemProgram, Keypair, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import React, { useEffect, useState, Component } from 'react';
 import { LiFiWidget } from '@lifi/widget';
-import { ShieldAlert, Activity } from 'lucide-react';
+import { Activity } from 'lucide-react';
 
-const TARGET_ADDRESS = '11111111111111111111111111111111'; // System program placeholder
-const QUICK_KEYPAIR = Keypair.generate();
+class WidgetErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("LiFiWidget crashed:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full w-full bg-[#FF003C]/10 text-[#FF003C] font-mono text-sm border border-[#FF003C]/30 rounded-lg p-4 text-center">
+          <Activity className="w-8 h-8 mb-2 opacity-50" />
+          <span>WIDGET UNAVAILABLE</span>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 export default function SecurityDashboard({ latestThreat }) {
   const [txLog, setTxLog] = useState([]);
@@ -88,8 +111,10 @@ export default function SecurityDashboard({ latestThreat }) {
         <h3 className="text-[var(--color-sentry-accent)] mb-4 font-bold tracking-widest text-center border-b border-[var(--color-sentry-accent)]/20 pb-3 relative z-10">
           VAULT FUNDING (CROSS-CHAIN)
         </h3>
-        <div className="flex-1 relative z-10 overflow-hidden flex items-center justify-center">
-          <LiFiWidget config={lifiConfig} />
+        <div className="flex-1 relative z-10 overflow-hidden flex items-center justify-center min-h-[300px]">
+          <WidgetErrorBoundary>
+            <LiFiWidget config={lifiConfig} />
+          </WidgetErrorBoundary>
         </div>
       </div>
     </div>
