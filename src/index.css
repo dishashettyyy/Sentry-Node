@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sentry-bg: #0A0A0A;
+  --color-sentry-accent: #14F195;
+  --color-sentry-alert: #FF003C;
+}
+
+body {
+  background-color: var(--color-sentry-bg);
+  color: #FFFFFF;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
