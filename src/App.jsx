@@ -28,8 +28,11 @@ function App() {
         <div className="min-h-screen bg-[var(--color-sentry-bg)] text-[var(--color-sentry-accent)] p-2 font-mono flex flex-col h-screen overflow-hidden selection:bg-[var(--color-sentry-accent)] selection:text-black">
           {/* Terminal Title Bar */}
           <header className="mb-2 flex items-center justify-between border-b border-[var(--color-sentry-accent)]/50 pb-1 px-2 text-[10px] md:text-xs">
-            <div className="flex gap-4">
-              <span className="font-bold text-white">NODE ID: SENTRY-X9</span>
+            <div className="flex gap-4 items-center">
+              <div className="flex gap-2 items-center">
+                <img src="/logo.png" alt="Sentry Node Logo" className="h-4 w-4 object-contain brightness-110" />
+                <span className="font-bold text-white">NODE ID: SENTRY-X9</span>
+              </div>
               <span className="text-[var(--color-sentry-accent)]/30">|</span>
               <span>STATUS: <span className="text-[var(--color-sentry-accent)] font-bold">ONLINE</span></span>
               <span className="text-[var(--color-sentry-accent)]/30">|</span>
