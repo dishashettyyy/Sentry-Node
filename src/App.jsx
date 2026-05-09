@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SentryCamera from './components/SentryCamera';
+import BootSequence from './components/BootSequence';
 import SecurityDashboard from './components/SecurityDashboard';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, createConfig, http } from 'wagmi';
@@ -17,6 +18,7 @@ const wagmiConfig = createConfig({
 
 function App() {
   const [latestThreat, setLatestThreat] = useState(null);
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const handleThreatDetected = (timestamp) => {
     setLatestThreat(timestamp);
@@ -25,7 +27,10 @@ function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen bg-[var(--color-sentry-bg)] text-[var(--color-sentry-accent)] p-2 font-mono flex flex-col h-screen overflow-hidden selection:bg-[var(--color-sentry-accent)] selection:text-black">
+        {!isAuthorized ? (
+          <BootSequence onComplete={() => setIsAuthorized(true)} />
+        ) : (
+          <div className="min-h-screen bg-[var(--color-sentry-bg)] text-[var(--color-sentry-accent)] p-2 font-mono flex flex-col h-screen overflow-hidden selection:bg-[var(--color-sentry-accent)] selection:text-black">
           {/* Terminal Title Bar */}
           <header className="mb-2 flex items-center justify-between border-b border-[var(--color-sentry-accent)]/50 pb-1 px-2 text-[10px] md:text-xs">
             <div className="flex gap-4 items-center">
@@ -79,7 +84,8 @@ function App() {
             </div>
             
           </main>
-        </div>
+          </div>
+        )}
       </QueryClientProvider>
     </WagmiProvider>
   );
