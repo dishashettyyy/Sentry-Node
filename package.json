@@ -14,7 +14,7 @@
     "@bigmi/react": "^0.8.0",
     "@lifi/widget": "^3.40.12",
     "@mysten/dapp-kit": "^1.0.6",
-    "@mysten/sui": "^1.45.2",
+    "@mysten/sui": "^2.16.2",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-react": "^0.15.39",
     "@solana/web3.js": "^1.98.4",
@@ -31,7 +31,7 @@
     "react-dom": "^19.2.5",
     "tailwindcss": "^4.3.0",
     "viem": "^2.48.11",
-    "wagmi": "^3.6.11"
+    "wagmi": "^2.14.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
