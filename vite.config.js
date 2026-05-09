@@ -10,6 +10,6 @@ export default defineConfig({
   ],
   optimizeDeps: {
     exclude: ['@lifi/widget', '@mysten/dapp-kit', '@mysten/sui'],
-    include: ['eventemitter3', 'bech32']
+    include: ['eventemitter3', 'bech32', 'react-is']
   }
 })
