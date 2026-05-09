@@ -8,6 +8,7 @@ export default function SentryCamera({ onThreatDetected }) {
   const [isGuarding, setIsGuarding] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [lastThreatTime, setLastThreatTime] = useState(0);
+  const [cameraError, setCameraError] = useState(null);
 
   useEffect(() => {
     // Load model
@@ -19,17 +20,27 @@ export default function SentryCamera({ onThreatDetected }) {
     loadModel();
   }, []);
 
-  useEffect(() => {
-    // Start camera
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({
-        video: { width: 320, height: 240 }
-      }).then((stream) => {
+  const startCamera = async () => {
+    setCameraError(null);
+    try {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 320, height: 240 }
+        });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
-      }).catch(err => console.error("Camera error:", err));
+      } else {
+        setCameraError("API_NOT_SUPPORTED");
+      }
+    } catch (err) {
+      console.error("Camera error:", err);
+      setCameraError(err.name || "PERMISSION_DENIED");
     }
+  };
+
+  useEffect(() => {
+    startCamera();
   }, []);
 
   const handleThreat = () => {
@@ -126,7 +137,21 @@ export default function SentryCamera({ onThreatDetected }) {
           <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[var(--color-sentry-accent)]" />
         </div>
         
-        {!model && (
+        {cameraError && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#FF003C]/10 backdrop-blur-sm z-20">
+            <div className="flex flex-col items-center gap-3 text-center p-4 border border-[#FF003C] bg-black">
+              <span className="text-[#FF003C] font-bold tracking-widest text-[10px]">[ERR] SENSOR OFFLINE: {cameraError}</span>
+              <button 
+                onClick={startCamera}
+                className="px-4 py-1 text-[10px] font-bold border border-[#FF003C] text-[#FF003C] hover:bg-[#FF003C]/20 transition-colors"
+              >
+                RETRY CONNECTION
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {!model && !cameraError && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-10">
             <div className="flex flex-col items-center gap-2">
               <span className="text-[var(--color-sentry-accent)] animate-pulse tracking-widest font-mono text-[10px]">INITIATING NEURAL WEIGHTS...</span>
