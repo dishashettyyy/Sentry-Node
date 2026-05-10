@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function NodeRegistration({ isRegistered }) {
+
   const handleRegister = () => {
     window.location.href = 'https://test.checkout.dodopayments.com/buy/pdt_0NeWIf0XmerEoOgdRGBWm?quantity=1&redirect_url=https://sentry-node-psi.vercel.app/?registered=true';
   };
@@ -13,7 +14,7 @@ export default function NodeRegistration({ isRegistered }) {
           ● {isRegistered ? 'SECURE' : 'UNREGISTERED'}
         </span>
       </div>
-      
+
       <div className="flex flex-col items-center justify-center flex-1 p-4 bg-black text-[10px] tracking-widest uppercase">
         {isRegistered ? (
           <div className="flex flex-col items-center gap-2">
