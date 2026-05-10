@@ -6,9 +6,8 @@ export default function NodeRegistration({ isRegistered }) {
   const handleRegister = async () => {
     try {
       setIsRedirecting(true);
-      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
       
-      const response = await fetch(`${backendUrl}/api/checkout`, {
+      const response = await fetch(`/api/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
