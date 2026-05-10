@@ -12,6 +12,10 @@
     {
       "source": "/api/webhook",
       "destination": "/api/webhook.mjs"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     }
   ]
 }
