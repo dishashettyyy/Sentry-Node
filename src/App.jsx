@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SentryCamera from './components/SentryCamera';
 import BootSequence from './components/BootSequence';
 import SecurityDashboard from './components/SecurityDashboard';
@@ -19,6 +19,15 @@ const wagmiConfig = createConfig({
 function App() {
   const [latestThreat, setLatestThreat] = useState(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('registered') === 'true') {
+      setIsRegistered(true);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
 
   const handleThreatDetected = (timestamp) => {
     setLatestThreat(timestamp);
@@ -80,7 +89,7 @@ function App() {
 
             {/* Right Column: Dashboard */}
             <div className="flex flex-col min-h-0">
-              <SecurityDashboard latestThreat={latestThreat} />
+              <SecurityDashboard latestThreat={latestThreat} isRegistered={isRegistered} />
             </div>
             
           </main>

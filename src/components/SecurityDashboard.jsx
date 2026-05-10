@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Component } from 'react';
 import { LiFiWidget } from '@lifi/widget';
+import NodeRegistration from './NodeRegistration';
 
 class WidgetErrorBoundary extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class WidgetErrorBoundary extends Component {
   }
 }
 
-export default function SecurityDashboard({ latestThreat }) {
+export default function SecurityDashboard({ latestThreat, isRegistered }) {
   const [txLog, setTxLog] = useState([]);
   
   useEffect(() => {
@@ -128,6 +129,8 @@ export default function SecurityDashboard({ latestThreat }) {
           ))}
         </div>
       </div>
+      
+      <NodeRegistration isRegistered={isRegistered} />
       
       {/* Vault Funding */}
       <div className="panel-container flex-1 flex flex-col relative overflow-hidden">
