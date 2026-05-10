@@ -25,27 +25,34 @@ export default async function handler(req, res) {
     const origin = `${protocol}://${host}`;
 
     const payment = await dodo.payments.create({
+      payment_link: true,
       billing: {
         city: 'San Francisco',
         country: 'US',
         state: 'CA',
         street: '123 Fake St',
-        zipcode: '94105'
+        zipcode: 94105
       },
       customer: {
         email: 'test@example.com',
         name: 'Sentry Operator'
       },
-      productCart: [
+      product_cart: [
         {
-          productId: process.env.DODO_PRODUCT_ID,
+          product_id: process.env.DODO_PRODUCT_ID,
           quantity: 1
         }
       ],
-      returnUrl: `${origin}/?registered=true`
+      return_url: `${origin}/?registered=true`
     });
 
-    return res.status(200).json({ url: payment.checkoutUrl });
+    const url = payment.payment_link;
+    if (!url) {
+      console.error('No payment_link in response:', JSON.stringify(payment));
+      return res.status(500).json({ error: 'No checkout URL returned from Dodo' });
+    }
+
+    return res.status(200).json({ url });
   } catch (error) {
     console.error('Dodo API error:', error?.message, error?.status);
     return res.status(500).json({
