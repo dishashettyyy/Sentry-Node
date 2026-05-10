@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 
 export default function NodeRegistration({ isRegistered }) {
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleRegister = async () => {
     try {
       setIsRedirecting(true);
+      setError(null);
       
       const response = await fetch(`/api/checkout`, {
         method: 'POST',
@@ -24,10 +26,10 @@ export default function NodeRegistration({ isRegistered }) {
       } else {
         throw new Error('No checkout URL received');
       }
-    } catch (error) {
-      console.error('Registration failed:', error);
+    } catch (err) {
+      console.error('Registration failed:', err);
       setIsRedirecting(false);
-      alert('Failed to initiate registration. Is the backend running?');
+      setError(err.message || 'Unknown error occurred');
     }
   };
 
@@ -51,6 +53,11 @@ export default function NodeRegistration({ isRegistered }) {
             <div className="text-center text-[var(--color-sentry-alert)] border border-[var(--color-sentry-alert)]/30 bg-[#FF003C]/10 py-2">
               STATUS: UNREGISTERED
             </div>
+            {error && (
+              <div className="text-center text-[var(--color-sentry-alert)] border border-[var(--color-sentry-alert)]/50 bg-black py-2 mt-1">
+                ERR: {error}
+              </div>
+            )}
             <button
               onClick={handleRegister}
               disabled={isRedirecting}
