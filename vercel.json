@@ -1,8 +1,17 @@
 {
+  "functions": {
+    "api/*.mjs": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "source": "/api/checkout",
+      "destination": "/api/checkout.mjs"
+    },
+    {
+      "source": "/api/webhook",
+      "destination": "/api/webhook.mjs"
     }
   ]
 }
